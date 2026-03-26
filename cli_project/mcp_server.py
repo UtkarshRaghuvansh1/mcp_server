@@ -39,10 +39,45 @@ def edit_doc(doc_id: str = Field(description="The ID of the document to edit"), 
         return "Document not found."
 
 # TODO: Write a resource to return all doc id's
-# TODO: Write a resource to return the contents of a particular doc
-# TODO: Write a prompt to rewrite a doc in markdown format
-# TODO: Write a prompt to summarize a doc
+@mcp.resource(
+    "docs://documents",
+    mime_type="application/json",
+)
+def list_docs()->list[str]:
+    return list(docs.keys())
 
+# TODO: Write a resource to return the contents of a particular doc
+@mcp.resource(
+    "docs://documents/{doc_id}",
+    mime_type="text/plain",
+)
+def fetch_doc(doc_id: str)->str:
+    if doc_id in docs:
+        return docs[doc_id]
+    else:
+        return "Document not found."
+    
+  # TODO: Write a prompt to rewrite a doc in markdown format
+@mcp.prompt(
+    "rewrite_doc",
+    description="Rewrite a doc in markdown format.",
+)
+def rewrite_doc(doc_id: str)->str:
+    if doc_id in docs:
+        return docs[doc_id]
+    else:
+        return "Document not found."
+
+# TODO: Write a prompt to summarize a doc
+@mcp.prompt(
+    "summarize_doc",
+    description="Summarize a doc.",
+)
+def summarize_doc(doc_id: str)->str:
+    if doc_id in docs:
+        return docs[doc_id]
+    else:
+        return "Document not found."
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")
